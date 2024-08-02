@@ -1,13 +1,11 @@
 package com.gabrielanselmoadev.project.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_user")
@@ -22,6 +20,9 @@ public class User implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
+
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
 
 	public User() {
 		
@@ -76,8 +77,8 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 	@Override
