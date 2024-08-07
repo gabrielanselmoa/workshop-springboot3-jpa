@@ -1,16 +1,15 @@
 package com.gabrielanselmoadev.project.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.gabrielanselmoadev.project.entities.User;
 import com.gabrielanselmoadev.project.services.UserService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -29,5 +28,19 @@ public class UserResource {
 	public ResponseEntity<User> findById(@PathVariable Long id){
 		User u = service.findById(id);
 		return ResponseEntity.ok().body(u);
+	}
+
+	@PostMapping
+	public ResponseEntity<User> insert(@RequestBody User u){
+		u = service.insert(u);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+				.path("/{id}")
+				.buildAndExpand(u.getId()).toUri();
+		return ResponseEntity.created(uri).body(u);
+	}
+
+	@DeleteMapping(value = "/delete/{id}")
+	public void delete(@PathVariable Long id){
+		service.delete(id);
 	}
 }
